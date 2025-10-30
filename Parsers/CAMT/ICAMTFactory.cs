@@ -26,7 +26,7 @@ namespace esCAMTParser.Parsers.CAMT
 
             var schema = root?.GetDefaultNamespace()?.NamespaceName ?? string.Empty;
 
-            var match = Regex.Match(schema, @"camt\.053\.001\.(\d+)$");
+            var match = Regex.Match(schema, @"camt\.053\.001\.(\d+)");
             if (!match.Success)
                 throw new NotSupportedException($"Unsupported CAMT schema: {schema}");
 

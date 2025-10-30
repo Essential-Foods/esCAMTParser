@@ -96,13 +96,24 @@ namespace esCAMTParser.Parsers.CAMT._053.V2
             {
                 transaction.References = ParseReferences(txDtl.ElementAnyNs("Refs"));
                 transaction.Parties = ParseParties(txDtl.ElementAnyNs("RltdPties"), txDtl.ElementAnyNs("RltdAgts"));
-                transaction.Remittance = new Remittance { Unstructured = txDtl.ElementAnyNs("RmtInf")?.ElementAnyNs("Ustrd")?.Value};
+                transaction.Remittance = ParseRemittance(txDtl.ElementAnyNs("RmtInf"));
                 transaction.Reversal = ParseReversal(txDtl.ElementAnyNs("RvsdAmt"));
                 transaction.RelatedDates = ParseRelatedDates(txDtl.ElementAnyNs("RltdDts"));
                 transaction.Attributes = ParseAttributes(txDtl);
             }
 
             return transaction;
+        }
+
+        internal Remittance ParseRemittance(XElement? rmtInf)
+        {
+            return new Remittance
+            {
+                Unstructured = rmtInf?.ElementAnyNs("Ustrd")?.Value,
+                CreditorReference = rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("CdtrRefInf")?.ElementAnyNs("Ref")?.Value,
+                InvoiceReference = rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("RfrdDocInf")?.ElementAnyNs("Nb")?.Value,
+                ReferencedDocumentAmount = DecimalParser.ParseInvariant(rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("RfrdDocAmt")?.ElementAnyNs("DuePyblAmt")?.Value)
+            };
         }
 
         internal References ParseReferences(XElement? refs)

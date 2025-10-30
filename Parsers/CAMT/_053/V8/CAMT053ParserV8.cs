@@ -41,17 +41,6 @@ namespace esCAMTParser.Parsers.CAMT._053.V8
             return transaction;
         }
 
-        internal Remittance ParseRemittance(XElement? rmtInf)
-        {
-            return new Remittance
-            {
-                Unstructured = rmtInf?.ElementAnyNs("Ustrd")?.Value,
-                CreditorReference = rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("CdtrRefInf")?.ElementAnyNs("Ref")?.Value,
-                InvoiceReference = rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("RfrdDocInf")?.ElementAnyNs("Nb")?.Value,
-                ReferencedDocumentAmount = DecimalParser.ParseInvariant(rmtInf?.ElementAnyNs("Strd")?.ElementAnyNs("RfrdDocAmt")?.ElementAnyNs("DuePyblAmt")?.Value)
-            };
-        }
-
         internal Charges ParseCharges(XElement? chrgs)
         {
             return new Charges
